@@ -124,6 +124,34 @@ int getMaximum()
 }
 
 // Part V – sendReport()
+// sendReport() – put all the results in ONE JSON object and send it.
+void sendReport(float average, int minimum, int maximum, int level)
+{
+  // A JsonDocument holds JSON data in memory
+  // (Common Commands: "Create a JSON Document").
+  JsonDocument report;
+
+  // Add key : value pairs (Common Commands: "Add a Key and Value").
+  report["device"] = "esp32-lab11";    // text
+  report["average"] = average;         // number with decimals
+  report["min"] = minimum;             // whole number
+  report["max"] = maximum;        // whole number
+  report["level"] = level;          // the key must be called level
+
+  // Create a JSON array called "samples"
+  // (Common Commands: "Add a JSON Array"),
+  // then copy every element of the C++ array into it.
+  JsonArray data = report["samples"].to<JsonArray>();
+  for (int i = 0; i < NUM_SAMPLES; i++)
+  {
+    data.add(samples[i]);           // add one value at the end
+  }
+
+  // Turn the document into text and send it, one value per line
+  // (Common Commands: "Send JSON").
+  serializeJson(report, Serial);
+  Serial.println();
+}
 
 
 // Part IV – runMeasurement()
@@ -141,11 +169,7 @@ void runMeasurement()
   int level = map((int)average, 0, 4096, 0, NUM_LEDS + 1);
   showLevel(level);                 // show the level on the bar graph
 
-  printSamples();
-  Serial.print("Average: ");   Serial.println(average);
-  Serial.print("Minimum: ");   Serial.println(minimum);
-  Serial.print("Maximum: ");   Serial.println(maximum);
-  Serial.print("Level: ");     Serial.println(level);
+  sendReport(average, minimum, maximum, level); //send everything as JSON
 }
 
 
