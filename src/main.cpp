@@ -79,6 +79,14 @@ void loop()
     delay(STEP_TIME);
     digitalWrite(LED_PINS[i], LOW);    // turn it off again
   }
+  // Visit each LED from the last to the first: start at the LAST index and count DOWN
+  // (Common Commands: "Count Down"). What is the index of the last element?
+  for (int i = 3; i >= 0; i--)
+  {
+    digitalWrite(LED_PINS[i], HIGH);
+    delay(STEP_TIME);
+    digitalWrite(LED_PINS[i], LOW);
+  }
 
 
   // Part IV – Wait for the button, then measure (while loops)
