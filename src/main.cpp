@@ -16,6 +16,13 @@
 
 // ----- Global variables ----------------------------------------------
 // Part III – LED pins array
+// An array holds many values of the same type under ONE name
+// (Common Commands: "Declare an Array").
+// 1st blank: how many elements?
+// Next four blanks: the LED pins from Part II, LED 0 first.
+const int LED_PINS[4] = {16, 17, 18, 19};
+const int NUM_LEDS = 4;      // the number of elements in LED_PINS
+const int STEP_TIME = 200;   // how long each LED stays on (ms)
 
 
 // Part IV – samples array
