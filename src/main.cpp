@@ -69,7 +69,7 @@ void takeSamples()
 // printSamples() – print every element of the array, one per line.
 void printSamples()
 {
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 10; i++)
   {
     Serial.print("samples[");
     Serial.print(i);
