@@ -149,7 +149,7 @@ void sendReport(float average, int minimum, int maximum, int level)
 
   // Turn the document into text and send it, one value per line
   // (Common Commands: "Send JSON").
-  serializeJson(report, Serial);
+  serializeJsonPretty(report, Serial);
   Serial.println();
 }
 
@@ -174,6 +174,83 @@ void runMeasurement()
 
 
 // Part V – handleCommand() and checkSerial()
+// handleCommand() – read one JSON command and do what it asks.
+void handleCommand(String text)
+{
+  JsonDocument command;
+
+  // Read the JSON text into the document (Common Commands: "Read JSON").
+  DeserializationError error = deserializeJson(command, text);
+
+  // If the text is not valid JSON, print the reason and stop here.
+  if (error)
+  {
+    Serial.print("JSON error: ");
+    Serial.println(error.c_str());
+    return;
+  }
+
+  // {"leds":[1,0,1,0]} – is there a key "leds" whose value is an array?
+  // (Common Commands: "Check a Value's Type")
+  if (command["leds"].is<JsonArray>())
+  {
+    JsonArray leds = command["leds"];
+    for (int i = 0; i < NUM_LEDS; i++)
+    {
+      // Element i of the JSON array (a missing element gives 0).
+      int value = leds[i];
+      digitalWrite(LED_PINS[i], value);  // 1 = on, 0 = off
+    }
+    Serial.println("LEDs updated");
+  }
+
+  // {"level":3} – is there a key "level" whose value is a whole number?
+  if (command["level"].is<int>())
+  {
+    int level = command["level"];
+    showLevel(level);
+    Serial.print("Level set to ");
+    Serial.println(level);
+  }
+
+  // {"cmd":"report"} – read the text of "cmd" ("" if the key is missing)
+  // (Common Commands: "Read a Value").
+  String name = command["cmd"] | "";
+  if (name == "report")
+  {
+    runMeasurement();                  // take a measurement and send the report
+  }
+}
+
+// The characters received so far. It is global, so it keeps its value
+// between two calls of checkSerial().
+String inputLine = "";
+
+// checkSerial() – collect the characters one by one. When Enter arrives,
+// pass the whole line to handleCommand().
+void checkSerial()
+{
+  while (Serial.available() > 0)              // repeat for every character waiting
+  {
+    // Take ONE character (Common Commands: "Read a Character").
+    char c = Serial.read();
+
+    if (c == '\n' || c == '\r')             // Enter key ('\n' or '\r')
+    {
+      inputLine.trim();                       // remove spaces at both ends
+      if (inputLine.length() > 0)             // ignore an empty line
+      {
+        handleCommand(inputLine);
+      }
+      inputLine = "";                         // start again with an empty line
+    }
+    else
+    {
+      // Add the character at the end (Common Commands: "Add to a String").
+      inputLine += c;
+    }
+  }
+}
 
 
 void setup()
@@ -200,7 +277,13 @@ void loop()
 {
 
   // Part IV – Wait for the button, then measure (while loops)
-  Serial.println("Press the button to measure...");
+  Serial.println("Press the button, or send a JSON command...");
+  while (digitalRead(BUTTON_PIN) == HIGH)
+  {
+    checkSerial();      // NEW: handle JSON commands while waiting for the button
+    delay(10);
+  }
+
 
   // A while loop repeats AS LONG AS its condition is true
   // (Common Commands: "While Loop").
