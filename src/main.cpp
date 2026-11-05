@@ -50,6 +50,16 @@ void setup()
   Serial.begin(115200);
 
   // Inputs and outputs
+  // Button: input with the internal pull-up resistor
+  // (Common Commands: "Input with Pull-up").
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
+  // ONE for loop sets all four LED pins as outputs (Common Commands: "For Loop").
+  // i takes the values 0, 1, 2, 3 – one for each element of the array.
+  for (int i = 0; i < 4; i++)
+  {
+    pinMode(LED_PINS[i], OUTPUT);    // the element number (index) is i
+  }
 
 
   Serial.println("Lab 11 – Arrays, Loops and JSON");
@@ -58,6 +68,17 @@ void setup()
 void loop()
 {
   // Part III – LED patterns (for loops)
+  // Visit each LED from the first (index 0) to the last, one after the other.
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    digitalWrite(LED_PINS[i], HIGH);   // turn LED number i on
+    Serial.print("LED ");
+    Serial.print(i);
+    Serial.print(" is on GPIO ");
+    Serial.println(LED_PINS[i]);      // print the pin number stored at index i
+    delay(STEP_TIME);
+    digitalWrite(LED_PINS[i], LOW);    // turn it off again
+  }
 
 
   // Part IV – Wait for the button, then measure (while loops)
