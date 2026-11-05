@@ -83,36 +83,28 @@ void setup()
 
 void loop()
 {
-  // Part III – LED patterns (for loops)
-  // Visit each LED from the first (index 0) to the last, one after the other.
-  for (int i = 0; i < NUM_LEDS; i++)
-  {
-    digitalWrite(LED_PINS[i], HIGH);   // turn LED number i on
-    Serial.print("LED ");
-    Serial.print(i);
-    Serial.print(" is on GPIO ");
-    Serial.println(LED_PINS[i]);      // print the pin number stored at index i
-    delay(STEP_TIME);
-    digitalWrite(LED_PINS[i], LOW);    // turn it off again
-  }
-  // Visit each LED from the last to the first: start at the LAST index and count DOWN
-  // (Common Commands: "Count Down"). What is the index of the last element?
-  for (int i = 3; i >= 0; i--)
-  {
-    digitalWrite(LED_PINS[i], HIGH);
-    delay(STEP_TIME);
-    digitalWrite(LED_PINS[i], LOW);
-  }
-
-  // Show the levels 0, 1, 2, 3 and 4, half a second each.
-  for (int level = 0; level <= NUM_LEDS; level++)
-  {
-    showLevel(level);
-    delay(500);
-  }
-
 
   // Part IV – Wait for the button, then measure (while loops)
+  Serial.println("Press the button to measure...");
+
+  // A while loop repeats AS LONG AS its condition is true
+  // (Common Commands: "While Loop").
+  // A released button reads HIGH, so this loop waits here until the button is pressed.
+  while (digitalRead(BUTTON_PIN) == HIGH)
+  {
+    delay(10);
+  }
+  delay(50);     // ignore switch bounce (like the debounce in Lab 10)
+
+  Serial.println("Button pressed!");
+
+  // Now wait here until the button is released, so one press = one measurement.
+  while (digitalRead(BUTTON_PIN) == LOW)
+  {
+    delay(10);
+  }
+  delay(50);     // ignore switch bounce when the button is released
+
 
 
 }
