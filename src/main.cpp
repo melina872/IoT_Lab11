@@ -1,18 +1,59 @@
+// =====================================================================
+// Lab 11 – Arrays, Loops and JSON  (STARTER FILE)
+// IoT I – Dawson College – Electrical Engineering Technology
+//
+// Build this program one part at a time, following the lab procedure.
+// Each comment below marks where the code from the procedure goes.
+// =====================================================================
 #include <Arduino.h>
+#include <ArduinoJson.h>   // added with lib_deps in platformio.ini
 
-// put function declarations here:
-int myFunction(int, int);
+// ----- Pins ----------------------------------------------------------
+// Replace each ___ with the GPIO number from the tables in Part II.
+#define BUTTON_PIN  32   // push button (to GND)
+#define POT_PIN     34   // potentiometer wiper (analog input)
+// The four LED pins are stored in an array (Global variables, Part III).
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+// ----- Global variables ----------------------------------------------
+// Part III – LED pins array
+
+
+// Part IV – samples array
+
+
+// ----- Helper functions ----------------------------------------------
+// Part III – showLevel()
+
+
+// Part IV – takeSamples(), printSamples(), getAverage(),
+//           getMinimum(), getMaximum()
+
+
+// Part V – sendReport()
+
+
+// Part IV – runMeasurement()
+
+
+// Part V – handleCommand() and checkSerial()
+
+
+void setup()
+{
+  Serial.begin(115200);
+
+  // Inputs and outputs
+
+
+  Serial.println("Lab 11 – Arrays, Loops and JSON");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop()
+{
+  // Part III – LED patterns (for loops)
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+
+  // Part IV – Wait for the button, then measure (while loops)
+
+
 }
